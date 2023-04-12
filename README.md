@@ -1,4 +1,4 @@
-# RobotFramwork
+# RobotFramework
 
 Hello! It's my robotframework task for program DQE Intermediate Level.
 
