@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.0.2 (Python 3.10.8 on win32)" generated="20230412 10:35:51.971" rpa="false" schemaversion="3">
+<suite id="s1" name="TestsForTRN" source="C:\Users\Yelyzaveta_Shapran\Desktop\DQE_midle\Module 4\Robot Framework\RobotFramework\TestsForTRN.robot">
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary" type="SETUP">
+<arg>pymssql</arg>
+<arg>host=${DBHost}, user=${DBUser}, password=${DBPass}, database=${DBName}</arg>
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to
+connect to the database using the map string `db_custom_param_string`.</doc>
+<msg timestamp="20230412 10:35:52.048" level="INFO">Executing : Connect To Database Using Custom Params : pymssql.connect(db_api_2.connect(host='EPUAKYIW04F3\SQLEXPRESS01', user='loginForTest', password='passwordfortest', database='TRN')) </msg>
+<status status="PASS" starttime="20230412 10:35:52.027" endtime="20230412 10:35:52.377"/>
+</kw>
+<test id="s1-t1" name="1. [job_title] Check duplicates" line="16">
+<kw name="Row Count Is 0" library="DatabaseLibrary">
+<arg>SELECT * FROM (SELECT [job_title],[min_salary],[max_salary],ROW_NUMBER() OVER(partition by [job_title] order by [min_salary], [max_salary] asc) as row_num FROM [hr].[jobs]) tmp_tbl WHERE row_num &gt; 1</arg>
+<doc>Check if any rows are returned from the submitted `selectStatement`. If there are, then this will throw an
+AssertionError. Set optional input `sansTran` to True to run command without an explicit transaction commit or
+rollback.</doc>
+<msg timestamp="20230412 10:35:52.380" level="INFO">Executing : Row Count Is 0  |  SELECT * FROM (SELECT [job_title],[min_salary],[max_salary],ROW_NUMBER() OVER(partition by [job_title] order by [min_salary], [max_salary] asc) as row_num FROM [hr].[jobs]) tmp_tbl WHERE row_num &gt; 1 </msg>
+<msg timestamp="20230412 10:35:52.380" level="INFO">Executing : Row Count  |  SELECT * FROM (SELECT [job_title],[min_salary],[max_salary],ROW_NUMBER() OVER(partition by [job_title] order by [min_salary], [max_salary] asc) as row_num FROM [hr].[jobs]) tmp_tbl WHERE row_num &gt; 1 </msg>
+<status status="PASS" starttime="20230412 10:35:52.378" endtime="20230412 10:35:52.391"/>
+</kw>
+<tag>jobs</tag>
+<status status="PASS" starttime="20230412 10:35:52.378" endtime="20230412 10:35:52.393"/>
+</test>
+<test id="s1-t2" name="2. [job_title] Check average of min_salary, max_salary" line="21">
+<kw name="Query" library="DatabaseLibrary">
+<var>${output}</var>
+<arg>SELECT 'ALL' job_titles, AVG([min_salary]) avg_min, AVG([max_salary]) avg_max FROM [hr].[jobs]</arg>
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional
+input `sansTran` to True to run command without an explicit transaction commit or rollback.
+Set optional input `returnAsDict` to True to return values as a list of dictionaries.</doc>
+<msg timestamp="20230412 10:35:52.396" level="INFO">Executing : Query  |  SELECT 'ALL' job_titles, AVG([min_salary]) avg_min, AVG([max_salary]) avg_max FROM [hr].[jobs] </msg>
+<msg timestamp="20230412 10:35:52.401" level="INFO">${output} = [('ALL', Decimal('6568.421052'), Decimal('13210.526315'))]</msg>
+<status status="PASS" starttime="20230412 10:35:52.395" endtime="20230412 10:35:52.401"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20230412 10:35:52.401" level="INFO">[('ALL', Decimal('6568.421052'), Decimal('13210.526315'))]</msg>
+<status status="PASS" starttime="20230412 10:35:52.401" endtime="20230412 10:35:52.401"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>${output}[0][1] &lt; ${output}[0][2]</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" starttime="20230412 10:35:52.401" endtime="20230412 10:35:52.405"/>
+</kw>
+<tag>jobs</tag>
+<status status="PASS" starttime="20230412 10:35:52.394" endtime="20230412 10:35:52.405"/>
+</test>
+<test id="s1-t3" name="3. [employees] Check count of employees" line="28">
+<kw name="Row Count Is Equal To X" library="DatabaseLibrary">
+<arg>SELECT distinct employee_id from [hr].[employees];</arg>
+<arg>40</arg>
+<doc>Check if the number of rows returned from `selectStatement` is equal to the value submitted. If not, then this
+will throw an AssertionError. Set optional input `sansTran` to True to run command without an explicit
+transaction commit or rollback.</doc>
+<msg timestamp="20230412 10:35:52.408" level="INFO">Executing : Row Count Is Equal To X  |  SELECT distinct employee_id from [hr].[employees];  |  40 </msg>
+<msg timestamp="20230412 10:35:52.408" level="INFO">Executing : Row Count  |  SELECT distinct employee_id from [hr].[employees]; </msg>
+<status status="PASS" starttime="20230412 10:35:52.407" endtime="20230412 10:35:52.416"/>
+</kw>
+<tag>employees</tag>
+<status status="PASS" starttime="20230412 10:35:52.405" endtime="20230412 10:35:52.416"/>
+</test>
+<test id="s1-t4" name="4. [employees] Check if data stored in required format" line="32">
+<kw name="Row Count Is 0" library="DatabaseLibrary">
+<arg>SELECT * FROM [hr].[employees] WHERE email NOT LIKE '%@%.org' OR phone_number NOT LIKE '%.%.%' OR hire_date NOT LIKE '____-__-__'</arg>
+<doc>Check if any rows are returned from the submitted `selectStatement`. If there are, then this will throw an
+AssertionError. Set optional input `sansTran` to True to run command without an explicit transaction commit or
+rollback.</doc>
+<msg timestamp="20230412 10:35:52.421" level="INFO">Executing : Row Count Is 0  |  SELECT * FROM [hr].[employees] WHERE email NOT LIKE '%@%.org' OR phone_number NOT LIKE '%.%.%' OR hire_date NOT LIKE '____-__-__' </msg>
+<msg timestamp="20230412 10:35:52.422" level="INFO">Executing : Row Count  |  SELECT * FROM [hr].[employees] WHERE email NOT LIKE '%@%.org' OR phone_number NOT LIKE '%.%.%' OR hire_date NOT LIKE '____-__-__' </msg>
+<status status="PASS" starttime="20230412 10:35:52.421" endtime="20230412 10:35:52.430"/>
+</kw>
+<tag>employees</tag>
+<status status="PASS" starttime="20230412 10:35:52.419" endtime="20230412 10:35:52.430"/>
+</test>
+<test id="s1-t5" name="5. [locations] Check if require columns consist new null value" line="36">
+<kw name="Row Count Is Equal To X" library="DatabaseLibrary">
+<arg>SELECT * FROM [hr].locations WHERE street_address IS NULL OR postal_code IS NULL OR city is null OR state_province IS NULL OR country_id IS NULL;</arg>
+<arg>1</arg>
+<doc>Check if the number of rows returned from `selectStatement` is equal to the value submitted. If not, then this
+will throw an AssertionError. Set optional input `sansTran` to True to run command without an explicit
+transaction commit or rollback.</doc>
+<msg timestamp="20230412 10:35:52.433" level="INFO">Executing : Row Count Is Equal To X  |  SELECT * FROM [hr].locations WHERE street_address IS NULL OR postal_code IS NULL OR city is null OR state_province IS NULL OR country_id IS NULL;  |  1 </msg>
+<msg timestamp="20230412 10:35:52.433" level="INFO">Executing : Row Count  |  SELECT * FROM [hr].locations WHERE street_address IS NULL OR postal_code IS NULL OR city is null OR state_province IS NULL OR country_id IS NULL; </msg>
+<status status="PASS" starttime="20230412 10:35:52.432" endtime="20230412 10:35:52.441"/>
+</kw>
+<tag>locations</tag>
+<status status="PASS" starttime="20230412 10:35:52.430" endtime="20230412 10:35:52.441"/>
+</test>
+<test id="s1-t6" name="6. [locations] Check if data from required countries" line="40">
+<kw name="Row Count Is 0" library="DatabaseLibrary">
+<arg>SELECT * FROM [hr].locations WHERE country_id NOT IN ('US', 'CA', 'UK', 'DE')</arg>
+<doc>Check if any rows are returned from the submitted `selectStatement`. If there are, then this will throw an
+AssertionError. Set optional input `sansTran` to True to run command without an explicit transaction commit or
+rollback.</doc>
+<msg timestamp="20230412 10:35:52.443" level="INFO">Executing : Row Count Is 0  |  SELECT * FROM [hr].locations WHERE country_id NOT IN ('US', 'CA', 'UK', 'DE') </msg>
+<msg timestamp="20230412 10:35:52.444" level="INFO">Executing : Row Count  |  SELECT * FROM [hr].locations WHERE country_id NOT IN ('US', 'CA', 'UK', 'DE') </msg>
+<status status="PASS" starttime="20230412 10:35:52.443" endtime="20230412 10:35:52.451"/>
+</kw>
+<tag>locations</tag>
+<status status="PASS" starttime="20230412 10:35:52.441" endtime="20230412 10:35:52.451"/>
+</test>
+<kw name="Disconnect From Database" library="DatabaseLibrary" type="TEARDOWN">
+<doc>Disconnects from the database.</doc>
+<msg timestamp="20230412 10:35:52.454" level="INFO">Executing : Disconnect From Database</msg>
+<status status="PASS" starttime="20230412 10:35:52.453" endtime="20230412 10:35:52.455"/>
+</kw>
+<status status="PASS" starttime="20230412 10:35:51.973" endtime="20230412 10:35:52.455"/>
+</suite>
+<statistics>
+<total>
+<stat pass="6" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="2" fail="0" skip="0">employees</stat>
+<stat pass="2" fail="0" skip="0">jobs</stat>
+<stat pass="2" fail="0" skip="0">locations</stat>
+</tag>
+<suite>
+<stat pass="6" fail="0" skip="0" id="s1" name="TestsForTRN">TestsForTRN</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
