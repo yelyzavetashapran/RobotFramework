@@ -40,6 +40,8 @@ Also check if your SQL Server browser is working. If not try follow this manual 
 
   ![image](https://user-images.githubusercontent.com/104168878/231386052-00a125b0-d2ba-44f9-9dd3-2cc297f91c41.png)
   ![image](https://user-images.githubusercontent.com/104168878/231386539-fefe1e3d-cfdc-47d5-96d8-8b5eb877b812.png)
+  ![image](https://user-images.githubusercontent.com/104168878/231389098-28c34b36-e2da-446e-8d86-a622e06f6687.png)
+  ![image](https://user-images.githubusercontent.com/104168878/231389199-2621d748-e615-40fd-b176-02a41b17d120.png)
 
 That's it! Thank you for your attention!
 
